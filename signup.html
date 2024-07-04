@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fdebd0; /* Light yellow background color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-between; /* Adjusted to place the logo and signup container at the ends */
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 320px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fda30e; /* Yellow color for the heading */
+            text-transform: uppercase;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #fda30e; /* Yellow color on focus */
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #fda30e; /* Yellow color for the button */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #e68a00; /* Darker yellow color on hover */
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .logo {
+            margin-left: 110px; /* Adjusted to align the logo on the left side */
+            font-size: 36px;
+            color: #fda30e; /* Yellow color for the logo */
+            font-weight: bold;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Text shadow effect */
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 31px;
+            color: #fda30e; /* Yellow color for the title */
+            font-weight: bold;
+        }
+
+        .underline {
+            display: inline-block;
+            border-bottom: 2px solid #fda30e; /* Yellow color */
+            padding-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">Water Monitoring System</div>
+    <div class="container">
+        <div class="title">Signup</div>
+        <form action="/signup" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="text" name="email" placeholder="Email" required>
+            <input type="text" name="mobile" placeholder="Mobile Number" required>
+            <input type="text" name="address" placeholder="Address" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="confirm password" placeholder="Confirm Password" required>
+            <button type="submit">Signup</button>
+            <p>Already have an account? <a href="/login.html">Login</a></p>
+            <p>Are you an admin? <a href="/adminlogin.html">Login as Admin</a></p>
+        </form>
+    </div>
+</body>
+</html>

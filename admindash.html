@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fdebd0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        h1 {
+            text-align: center;
+            color: #fda30e;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #fda30e;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background-color: #bd2130;
+        }
+        .btn-info {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+        .btn-info:hover {
+            background-color: #117a8b;
+        }
+        .logout-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .logout-btn button {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .logout-btn button:hover {
+            background-color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="user-list">
+                <!-- User data will be displayed here -->
+            </tbody>
+        </table>
+        <div class="logout-btn">
+            <button onclick="logout()" class="btn btn-secondary">Logout</button>
+        </div>
+    </div>
+
+    <!-- Modal for Verify by Email -->
+    <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="emailModalLabel">Verify User by Email</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="emailForm">
+                        <div class="form-group">
+                            <label for="emailInput">Email address</label>
+                            <input type="email" class="form-control" id="emailInput" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS
+        (function(){
+            emailjs.init("Po40NZX5zLo5ydgmN");
+        })();
+
+        // Function to fetch and display registered users from the database
+        function fetchUsers() {
+            fetch('/users')
+                .then(response => response.json())
+                .then(data => {
+                    const userList = document.getElementById('user-list');
+                    userList.innerHTML = '';
+                    data.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>${user.username}</td>
+                            <td>
+                                <button onclick="verifyUser(${user.id}, '${user.username}')" class="btn btn-primary">Verify</button>
+                                <button onclick="deleteUser(${user.id})" class="btn btn-danger">Delete</button>
+                                <button onclick="openEmailModal(${user.id}, '${user.username}')" class="btn btn-info">Verify by Email</button>
+                            </td>
+                        `;
+                        userList.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching users:', error));
+        }
+        
+        // Function to delete a user by ID
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                fetch(`/users/${userId}`, { method: 'DELETE' })
+                    .then(response => {
+                        if (response.ok) {
+                            fetchUsers(); // Refresh user list after deletion
+                        } else {
+                            console.error('Failed to delete user');
+                        }
+                    })
+                    .catch(error => console.error('Error deleting user:', error));
+            }
+        }
+        
+        // Function to logout
+        function logout() {
+            fetch('/logout', { method: 'POST' })
+                .then(() => window.location.href = '/adminlogin.html') // Redirect to the login page
+                .catch(error => console.error('Error logging out:', error));
+        }
+
+        // Function to verify user
+        function verifyUser(userId, username) {
+            if (confirm('Are you sure you want to verify this user?')) {
+                // Store notification in local storage
+                const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+                notifications.push(`User ${username} has been verified by the admin.`);
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+                alert('User verified successfully.');
+            }
+        }
+
+        // Function to open the email modal
+        function openEmailModal(userId, username) {
+            $('#emailModal').modal('show');
+            document.getElementById('emailForm').onsubmit = function(event) {
+                event.preventDefault();
+                const email = document.getElementById('emailInput').value;
+                sendEmailVerification(userId, email, username);
+                $('#emailModal').modal('hide');
+            };
+        }
+
+        // Function to send email verification
+        function sendEmailVerification(userId, email, username) {
+            emailjs.send("service_3trp35l", "template_7a4fesv", {
+                to_email: email,
+                user_id: userId,
+                user_name: username
+            }).then(function(response) {
+                // Store notification in local storage
+                const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+                notifications.push(`Verification email sent to ${username}.`);
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+                alert('Verification email sent successfully.');
+            }, function(error) {
+                console.error('Error sending verification email:', error);
+                alert('Failed to send verification email.');
+            });
+        }
+
+        // Fetch users when the page loads
+        fetchUsers();
+    </script>
+</body>
+</html>

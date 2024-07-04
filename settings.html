@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome for icons -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fdebd0; /* Light yellow background color */
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #fda30e; /* Yellow color for navigation bar */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            color: #fff;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+
+        .navbar-toggler-icon {
+            color: #fff;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff;
+            font-size: 16px;
+            margin-right: 20px;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .btn {
+            background-color: #fda30e;
+            /* Yellow color for the button */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 18px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            background-color: #e68a00;
+            /* Darker yellow color on hover */
+        }
+
+        .card {
+            background-color: #fff;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            background-color: #fda30e; /* Yellow color for card headers */
+            border-radius: 10px 10px 0 0;
+            font-weight: bold;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .card-body {
+            text-align: center;
+        }
+
+        .footer {
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer a {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .footer a:hover {
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="/logged-in"><i class="fas fa-tint"></i> Water Monitoring System</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/logged-in"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">Contact Administrator</div>
+                    <div class="card-body">
+                        <h2>Admin Info</h2>
+                        <p><i class="fas fa-envelope"></i> aaebrahim@graduate.utm.my</p>
+                        <p><i class="fas fa-envelope"></i> aali20741@gmail.com</p>
+                        <p><i class="fas fa-envelope"></i> theemonsterfitness@gmail.com</p>
+                        <p><i class="fas fa-envelope"></i> shashomeme527@gmail.com</p>
+                        <p><i class="fas fa-phone"></i> +60163131298</p>
+                    </div>
+                </div>
+                <button class="btn mt-4" onclick="window.location.href='login.html'"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                <button class="btn mt-4" onclick="randomizeOutput()">Test</button>
+            </div>
+        </div>
+    </div>
+
+   
+
+    <script>
+        function randomizeOutput() {
+            setInterval(updateCharts, 2000); // Update values every 2 seconds
+        }
+
+        function updateCharts() {
+            const timeNow = new Date().toLocaleTimeString();
+
+            const randomTemperature = (Math.random() * 10 + 20).toFixed(2);
+            const randomPh = (Math.random() * 4 + 5).toFixed(2);
+            const randomSalinity = (Math.random() * 30).toFixed(2);
+
+            if (temperatureData.length >= 10) {
+                temperatureData.shift();
+                phData.shift();
+                salinityData.shift();
+            }
+
+            temperatureData.push(randomTemperature);
+            phData.push(randomPh);
+            salinityData.push(randomSalinity);
+
+            temperatureChart.data.labels.push(timeNow);
+            phChart.data.labels.push(timeNow);
+            salinityChart.data.labels.push(timeNow);
+
+            document.getElementById('temperatureValue').innerText = randomTemperature + ' °C';
+            document.getElementById('phValue').innerText = randomPh;
+            document.getElementById('salinityValue').innerText = randomSalinity + ' ppt';
+
+            temperatureChart.update();
+            phChart.update();
+            salinityChart.update();
+        }
+
+        let temperatureChart, phChart, salinityChart;
+        let temperatureData = [];
+        let phData = [];
+        let salinityData = [];
+    </script>
+</body>
+
+</html>

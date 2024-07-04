@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Water Monitoring System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #fdebd0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #fda30e;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            color: #fff;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+        .navbar-toggler-icon {
+            color: #fff;
+        }
+        .navbar-nav .nav-link {
+            color: #fff;
+            font-size: 16px;
+            margin-right: 20px;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .notifications-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fda30e;
+        }
+        .notifications-list {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        .notification-item:hover {
+            background-color: #f9f9f9;
+        }
+        .notification-item a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .notification-item a:hover {
+            text-decoration: underline;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .delete-btn:hover {
+            background-color: #bd2130;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="/logged-in"><i class="fas fa-tint"></i> Water Monitoring System</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/logged-in"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="notifications-header">Notifications</h2>
+        <div class="notifications-list" id="notificationsList">
+            <!-- Notifications will be dynamically added here -->
+        </div>
+    </div>
+    
+    <script>
+        // Function to display notifications
+        function displayNotifications() {
+            const notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+            const notificationsList = document.getElementById('notificationsList');
+            notificationsList.innerHTML = ''; // Clear existing notifications
+
+            if (notifications.length === 0) {
+                notificationsList.innerHTML = '<div class="notification-item">No new notifications</div>';
+            } else {
+                notifications.forEach((notification, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'notification-item';
+                    div.innerHTML = `
+                        <span>${notification}</span>
+                        <button class="delete-btn" onclick="deleteNotification(${index})">Delete</button>
+                    `;
+                    notificationsList.appendChild(div);
+                });
+            }
+        }
+
+        // Function to delete a notification
+        function deleteNotification(index) {
+            let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+            notifications.splice(index, 1); // Remove the notification at the specified index
+            localStorage.setItem('notifications', JSON.stringify(notifications));
+            displayNotifications(); // Refresh the notification list
+        }
+
+        // Display notifications when the page loads
+        window.onload = displayNotifications;
+    </script>
+</body>
+</html>

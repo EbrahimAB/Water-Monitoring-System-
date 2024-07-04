@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Monitoring System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome for icons -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fdebd0; /* Light yellow background color */
+            margin: 0;
+            padding: 0;
+            position: relative; /* Added position relative */
+        }
+        .navbar {
+            background-color: #fda30e; /* Yellow color for navigation bar */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            color: #fff;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+        .navbar-toggler-icon {
+            color: #fff;
+        }
+        .navbar-nav .nav-link {
+            color: #fff;
+            font-size: 16px;
+            margin-right: 20px;
+        }
+        .notifications {
+            color: #fff;
+            font-size: 24px;
+            margin-left: auto;
+            cursor: pointer;
+            position: relative;
+        }
+        .notifications-panel {
+            position: absolute;
+            top: 60px;
+            right: 10%;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            padding: 10px;
+            width: 200px;
+        }
+        .notifications-panel ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .notifications-panel li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+        }
+        .notifications-panel li:last-child {
+            border-bottom: none;
+        }
+        .notifications-panel li a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .notifications-panel li a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            background-color: #fff;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background-color: #fda30e; /* Yellow color for card headers */
+            border-radius: 10px 10px 0 0;
+            font-weight: bold;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+        .card-header:before {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 50px;
+            height: 3px;
+            background-color: #fff;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        .card-body {
+            padding: 20px;
+            text-align: center;
+        }
+        .card-body h2 {
+            color: #007bff; /* Blue color for card body text */
+            font-size: 36px;
+            margin-bottom: 0;
+        }
+        .logout-btn {
+            background-color: #fda30e; /* Yellow color for the button */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 18px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .logout-btn:hover {
+            background-color: #e68a00; /* Darker yellow color on hover */
+        }
+        .username {
+            color: #007bff;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #888;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #888;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: #555;
+        }
+        /* Added styles for options menu */
+        .options-menu {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            cursor: pointer;
+        }
+        .options-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .options-menu li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ccc;
+        }
+        .options-menu li:last-child {
+            border-bottom: none;
+        }
+        .options-menu li a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .options-menu li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-tint"></i> Water Monitoring System</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-user"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html"><i class="fas fa-cog"></i> Settings</a> <!-- Added link to settings.html -->
+                    </li>
+                </ul>
+                <div class="notifications" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <div class="notifications-panel" id="notificationPanel">
+    <ul id="notificationList">
+        <!-- Notifications will be dynamically added here -->
+    </ul>
+</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="username">Welcome, bodi!</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Temperature</h2>
+                    </div>
+                    <div class="card-body">
+                        <h2 id="temperatureValue">--</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>pH</h2>
+                    </div>
+                    <div class="card-body">
+                        <h2 id="phValue">--</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Salinity</h2>
+                    </div>
+                    <div class="card-body">
+                        <h2 id="salinityValue">--</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Options Menu -->
+    <div class="options-menu" onclick="toggleOptionsMenu()">
+        <i class="fas fa-ellipsis-v"></i>
+        <ul id="optionsMenu" style="display: none;">
+            <li><a href="#"><i class="fas fa-database"></i> View Data Collected</a></li>
+            <li><a href="#"><i class="fas fa-user-cog"></i> Update Account</a></li>
+            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script> <!-- Popper.js -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> <!-- Bootstrap JS -->
+
+<script>
+    function toggleNotifications() {
+        var panel = document.getElementById('notificationPanel');
+        if (panel.style.display === 'block') {
+            panel.style.display = 'none';
+        } else {
+            panel.style.display = 'block';
+        }
+    }
+
+    function toggleOptionsMenu() {
+        var menu = document.getElementById('optionsMenu');
+        if (menu.style.display === 'block') {
+            menu.style.display = 'none';
+        } else {
+            menu.style.display = 'block';
+        }
+    }
+
+    const ws = new WebSocket('ws://localhost:3000');
+
+    ws.onmessage = function (event) {
+        const data = event.data;
+        // Check if data contains notifications or sensor values
+        if (typeof data === 'string') {
+            if (data.includes('Notification')) {
+                const notifications = data.split(', ');
+                // Clear existing notifications
+                document.getElementById('notificationList').innerHTML = '';
+                // Add new notifications to the panel
+                notifications.forEach(notification => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.textContent = notification;
+                    li.appendChild(a);
+                    document.getElementById('notificationList').appendChild(li);
+                });
+            } else {
+                const values = data.split(', ');
+                // Extract temperature, pH, and salinity values
+                const temperature = values[0].split(': ')[1];
+                const pH = values[1].split(': ')[1];
+                const salinity = values[2].split(': ')[1];
+                // Update the values in the HTML
+                document.getElementById('temperatureValue').textContent = temperature;
+                document.getElementById('phValue').textContent = pH;
+                document.getElementById('salinityValue').textContent = salinity;
+            }
+        } else if (data instanceof ArrayBuffer) {
+            const binaryData = new Uint8Array(data);
+            const text = new TextDecoder().decode(binaryData);
+            console.log(text);
+        }
+    };
+
+    // Function to logout
+    function logout() {
+        // Redirect to the login page
+        window.location.href = '/';
+    }
+</script>
+
+    
+
+</body>
+</html>
